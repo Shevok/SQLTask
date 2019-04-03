@@ -4,6 +4,8 @@ import dbwork.address.Address;
 import dbwork.address.AddressCrud;
 import professions.Profession;
 import professions.ProfessionCrud;
+import relations.SchoolboyProfRelation;
+import relations.SchoolboyProfRelationCrud;
 import school.School;
 import school.SchoolCrud;
 import schoolboy.Schoolboy;
@@ -74,7 +76,15 @@ public class Main{
             schoolboy.add(new Profession(2,"bus"));
 
             schoolboyCrud.create(schoolboy,con);*/
+
+            SchoolboyCrud schoolboyCrud = new SchoolboyCrud();
+            //Schoolboy schoolboy = schoolboyCrud.read(1,con);
+            AddressCrud addressCrud = new AddressCrud();
+            SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
+            schoolboyCrud.update(new Schoolboy(1,23, addressCrud.read(1,con)
+                    , schoolCrud.read(1,con),"Жора", "Реваззов", schoolboyProfRelationCrud.read(1,con)),con);
             ps.close();
+
         }catch (Exception e){
             System.out.println(e);
         }

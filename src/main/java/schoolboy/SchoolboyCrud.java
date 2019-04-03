@@ -55,18 +55,26 @@ public class SchoolboyCrud {
         }
     }
 
-    public Address read (int id, Connection con){
+    public Schoolboy read (int id, Connection con){
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (id_address, city, street, house_number) FROM address" +
-                            " WHERE id_address = ?");
+                    "SELECT (age, address_id, school_id, firstname, lastname) FROM schoolboy" +
+                            " WHERE id_schoolboy = ? ");
             ps.setInt(1, id);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if (rs.next())
-                return new Address(id, rs.getString(2),
-                        rs.getString(3), rs.getInt(4));
+            AddressCrud addressCrud = new AddressCrud();
+            SchoolCrud schoolCrud = new SchoolCrud();
+            SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
+
+            if (rs.next()){
+                System.out.println("Result set :" + rs.getInt(1));
+            }
+
+            /*return new Schoolboy(id,rs.getInt(2),addressCrud.read(rs.getInt(3),con)
+                    , schoolCrud.read(rs.getInt(4),con),rs.getString(5)
+                    , rs.getString(6), schoolboyProfRelationCrud.read(id,con));*/
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -76,17 +84,18 @@ public class SchoolboyCrud {
         return null;
     }
 
-    public void update (Address address, Connection con){
+    public void update (Schoolboy schoolboy, Connection con){
         try {
             PreparedStatement ps = con.prepareStatement(
-                    " UPDATE address\n" +
-                            "SET city = ?, street = ?, house_number = ?\n" +
-                            "WHERE id_address = ?");
+                    " UPDATE schoolboy\n" +
+                            "SET age = ?, address_id = ?, school_id = ?, firstname = ?, lastname = ? \n" +
+                            "WHERE id_schoolboy = ?");
 
-            ps.setString(1, address.getCity());
-            ps.setString(2, address.getStreet());
-            ps.setInt(3, address.getHouseNumber());
-            ps.setInt(4, address.getId());
+            ps.setInt(1, schoolboy.getAge());
+            ps.setInt(2, schoolboy.getAddress().getId());
+            ps.setInt(3, schoolboy.getSchool().getId());
+            ps.setString(4, schoolboy.getFirstname());
+            ps.setString(5, schoolboy.getLastname());
 
             ps.executeUpdate();
 
@@ -99,11 +108,9 @@ public class SchoolboyCrud {
     }
 
     public void delete(int id,Connection con){
-        PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement(
-                    " DELETE FROM address WHERE id_address = ?");
-
+            PreparedStatement ps = con.prepareStatement(
+                    " DELETE FROM schoolboy WHERE id_schoolboy = ?");
             ps.setInt(1, id);
             ps.execute();
         } catch (SQLException e) {

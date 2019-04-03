@@ -2,11 +2,15 @@ package relations;
 
 import dbwork.address.Address;
 import org.postgresql.util.PSQLException;
+import professions.Profession;
+import professions.ProfessionCrud;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchoolboyProfRelationCrud {
 
@@ -30,19 +34,23 @@ public class SchoolboyProfRelationCrud {
 
     }
 
-    public Address read (int id, Connection con){
-        ResultSet rs = null;
+    public List<Profession> read (int id, Connection con){
+
+        List<Profession> result = new ArrayList<>();
+        ProfessionCrud professionCrud = new ProfessionCrud();
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (id_address, city, street, house_number) FROM address" +
-                            " WHERE id_address = ?");
+                    "SELECT (profession_id) FROM schoolboy_profession_relation" +
+                            " WHERE schoolboy_id = ?");
             ps.setInt(1, id);
 
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if (rs.next())
-                return new Address(id, rs.getString(2),
-                        rs.getString(3), rs.getInt(4));
+            int i = 1;
+            while (rs.next()){
+                result.add(professionCrud.read(rs.getInt(i),con));
+                }
+                return result;
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -52,17 +60,16 @@ public class SchoolboyProfRelationCrud {
         return null;
     }
 
-    public void update (Address address, Connection con){
+    public void update (int idSchoolboy, int newProfessionsId, int oldProfessionsId, Connection con){
         try {
             PreparedStatement ps = con.prepareStatement(
-                    " UPDATE address\n" +
-                            "SET city = ?, street = ?, house_number = ?\n" +
-                            "WHERE id_address = ?");
+                    " UPDATE schoolboy_profession_relation\n" +
+                            "SET profession_id = ?\n" +
+                            "WHERE schoolboy_id = ? AND profession_id = ?");
 
-            ps.setString(1, address.getCity());
-            ps.setString(2, address.getStreet());
-            ps.setInt(3, address.getHouseNumber());
-            ps.setInt(4, address.getId());
+            ps.setInt(1, newProfessionsId );
+            ps.setInt(2, idSchoolboy);
+            ps.setInt(3, oldProfessionsId);
 
             ps.executeUpdate();
 
@@ -74,13 +81,14 @@ public class SchoolboyProfRelationCrud {
         }
     }
 
-    public void delete(int id,Connection con){
+    public void delete(int idSchoolboy, int idProfession, Connection con){
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(
-                    " DELETE FROM address WHERE id_address = ?");
+                    " DELETE FROM schoolboy_profession_relation WHERE schoolboy_id = ? AND profession_id = ?");
 
-            ps.setInt(1, id);
+            ps.setInt(1, idSchoolboy);
+            ps.setInt(2, idProfession);
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
