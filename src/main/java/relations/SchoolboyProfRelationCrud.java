@@ -40,7 +40,7 @@ public class SchoolboyProfRelationCrud {
         ProfessionCrud professionCrud = new ProfessionCrud();
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (profession_id) FROM schoolboy_profession_relation" +
+                    "SELECT profession_id FROM schoolboy_profession_relation" +
                             " WHERE schoolboy_id = ?");
             ps.setInt(1, id);
 

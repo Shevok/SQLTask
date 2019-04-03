@@ -58,7 +58,7 @@ public class SchoolboyCrud {
     public Schoolboy read (int id, Connection con){
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (age, address_id, school_id, firstname, lastname) FROM schoolboy" +
+                    "SELECT age, address_id, school_id, firstname, lastname FROM schoolboy" +
                             " WHERE id_schoolboy = ? ");
             ps.setInt(1, id);
 
@@ -68,13 +68,11 @@ public class SchoolboyCrud {
             SchoolCrud schoolCrud = new SchoolCrud();
             SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
 
-            if (rs.next()){
-                System.out.println("Result set :" + rs.getInt(1));
-            }
-
-            /*return new Schoolboy(id,rs.getInt(2),addressCrud.read(rs.getInt(3),con)
-                    , schoolCrud.read(rs.getInt(4),con),rs.getString(5)
-                    , rs.getString(6), schoolboyProfRelationCrud.read(id,con));*/
+            if (rs.next())
+                //System.out.println("Result set :" + rs.getInt(1));
+            return new Schoolboy(id,rs.getInt(1),addressCrud.read(rs.getInt(2),con)
+                    , schoolCrud.read(rs.getInt(3),con),rs.getString(4)
+                    , rs.getString(5), schoolboyProfRelationCrud.read(id,con));
         }catch (SQLException e){
             e.printStackTrace();
         }

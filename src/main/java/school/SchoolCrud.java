@@ -34,7 +34,7 @@ public class SchoolCrud {
         ResultSet rs = null;
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (school_number, school_type) FROM school" +
+                    "SELECT school_number, school_type FROM school" +
                             " WHERE id_school = ?");
             ps.setInt(1, id);
 

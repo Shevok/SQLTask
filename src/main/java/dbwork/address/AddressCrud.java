@@ -35,7 +35,7 @@ public class AddressCrud {
         ResultSet rs = null;
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT (id_address, city, street, house_number) FROM address" +
+                    "SELECT id_address, city, street, house_number FROM address" +
                             " WHERE id_address = ?");
             ps.setInt(1, id);
 
