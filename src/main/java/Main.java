@@ -36,57 +36,49 @@ public class Main{
     public static void main(String[] args) {
         Main app = new Main();
         Connection con = app.connect();
+        final int CURRENT_INDEX = 13;//я не сделал автоиндексацию,поэтому эта переменная эта текущий индекс
         try {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM schoolboy");
 
-            ResultSet rs = ps.executeQuery();
-            //получаем следующую строку результата, если она есть. '''В самом начале курсор стоит перед'''
-            //'''первой строкой'''. Если строка есть функция next() возвращает true и передвигает курсор
-            //на следующую строку
-            while (rs.next()) {
-                System.out.println(rs.getString(1) + rs.getString(2) + rs.getString(3));
-            }
+           AddressCrud addressCrud = new AddressCrud();
+           ProfessionCrud professionCrud = new ProfessionCrud();
+           SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
+           SchoolCrud schoolCrud = new SchoolCrud();
+           SchoolboyCrud schoolboyCrud = new SchoolboyCrud();
+            List <Profession> professions = new ArrayList<>();
+            professions.add(professionCrud.read(1,con));
+            professions.add(professionCrud.read(2,con));
 
-           // AddressCrud addressCrud = new AddressCrud();
-           // addressCrud.create(new Address(8, "Минск", "Гикало", 10),con);
-//          Address address = addressCrud.read(3,con);
-//            System.out.println(address.getId() + " "+address.getCity() + " " + address.getStreet()+ " " + address.getHouseNumber());
-//           addressCrud.update(new Address(2, "Витебск", "Красивая", 7),con);
-            //addressCrud.delete(5,con);
+            List <Profession> newProfessions = new ArrayList<>();
+            newProfessions.add(professionCrud.read(3,con));
+            newProfessions.add(professionCrud.read(4,con));
 
-            SchoolCrud schoolCrud = new SchoolCrud();
-//            schoolCrud.create(new School(5,5,"Гимназия"),con);
-//            School school = schoolCrud.read(3,con);
-//            System.out.println(school.getId() + " "+school.getSchoolNumber() + " " + school.getSchoolType());
-//            schoolCrud.delete(5,con);
-//            schoolCrud.update(new School(1,1,"Гимназия"),con);
+            /**
+             *create new schoolboy test
+             */
 
-            ProfessionCrud professionCrud = new ProfessionCrud();
-//            professionCrud.create(new Profession(4,"Военный"),con);
-//            professionCrud.delete(4,con);
-//            Profession profession = professionCrud.read(1,con);
-//            System.out.println(profession.getId() + " "+profession.getDescription());
-//            professionCrud.update(new Profession(1,"Стоматолог"),con);
+           /*schoolboyCrud.create(new Schoolboy(CURRENT_INDEX,17
+                   ,new Address(CURRENT_INDEX, "Минск", "Беды" ,4)
+                   ,new School(CURRENT_INDEX,15,"Средняя школа")
+                   ,"Григорий","Алферов",professions),con);*/
+            /**
+             * update schoolboy test
+             */
+           /*schoolboyCrud.update(new Schoolboy(CURRENT_INDEX,12
+                    ,new Address(CURRENT_INDEX, "Брест", "Беды" ,4)
+                    ,new School(CURRENT_INDEX,12,"Средняя школа")
+                    ,"Ян","Алферов",professions), newProfessions , con);*/
+            /**
+             * read schoolboy test
+             */
+            //Schoolboy testMan = schoolboyCrud.read(CURRENT_INDEX, con);
+            /**
+             * delete schoolboy test
+             */
+            //schoolboyCrud.delete(CURRENT_INDEX,con);
 
-            /*SchoolboyCrud schoolboyCrud = new SchoolboyCrud();
-            Schoolboy schoolboy = new Schoolboy(9, 16, new Address(9, "Minsk", "asd", 5)
-                    , new School(9, 7, "Gym"), "Egor", "Shevko"
-                    , new ArrayList<>());
-            schoolboy.add(new Profession(1,"Useless"));
-            schoolboy.add(new Profession(2,"bus"));
-
-            schoolboyCrud.create(schoolboy,con);*/
-
-            SchoolboyCrud schoolboyCrud = new SchoolboyCrud();
-            //Schoolboy schoolboy = schoolboyCrud.read(1,con);
-            AddressCrud addressCrud = new AddressCrud();
-            SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
-            schoolboyCrud.update(new Schoolboy(1,23, addressCrud.read(1,con)
-                    , schoolCrud.read(1,con),"Жора", "Реваззов", schoolboyProfRelationCrud.read(1,con)),con);
-            ps.close();
-
+           con.close();
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println(e+"Main");
         }
     }
 }

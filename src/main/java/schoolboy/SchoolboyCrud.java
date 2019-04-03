@@ -14,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchoolboyCrud {
 
@@ -82,7 +84,7 @@ public class SchoolboyCrud {
         return null;
     }
 
-    public void update (Schoolboy schoolboy, Connection con){
+    public void update (Schoolboy schoolboy, List<Profession> newProfessions, Connection con){
         try {
             PreparedStatement ps = con.prepareStatement(
                     " UPDATE schoolboy\n" +
@@ -94,7 +96,18 @@ public class SchoolboyCrud {
             ps.setInt(3, schoolboy.getSchool().getId());
             ps.setString(4, schoolboy.getFirstname());
             ps.setString(5, schoolboy.getLastname());
+            ps.setInt(6, schoolboy.getId());
 
+
+            AddressCrud addressCrud = new AddressCrud();
+            SchoolCrud schoolCrud = new SchoolCrud();
+            SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
+            addressCrud.update(schoolboy.getAddress(),con);
+            schoolCrud.update(schoolboy.getSchool(),con);
+            for(int i = 0; i < schoolboy.getProfessions().size(); i++){
+                schoolboyProfRelationCrud.update(schoolboy.getId(), newProfessions.get(i).getId()
+                        , schoolboy.getProfessions().get(i).getId(), con);
+            }
             ps.executeUpdate();
 
         } catch (PSQLException e){
@@ -110,7 +123,21 @@ public class SchoolboyCrud {
             PreparedStatement ps = con.prepareStatement(
                     " DELETE FROM schoolboy WHERE id_schoolboy = ?");
             ps.setInt(1, id);
+
+            SchoolboyCrud schoolboyCrud = new SchoolboyCrud();
+            List<Profession> allProfession;
+            allProfession = schoolboyCrud.read(id, con).getProfessions();
+
+            AddressCrud addressCrud = new AddressCrud();
+            SchoolCrud schoolCrud = new SchoolCrud();
+            SchoolboyProfRelationCrud schoolboyProfRelationCrud = new SchoolboyProfRelationCrud();
+            for(int i = 0; i < allProfession.size(); i++ )
+                schoolboyProfRelationCrud.delete(id, allProfession.get(i).getId(), con);
             ps.execute();
+            addressCrud.delete(id,con);
+            schoolCrud.delete(id,con);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
