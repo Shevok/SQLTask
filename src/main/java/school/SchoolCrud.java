@@ -1,6 +1,5 @@
 package school;
 
-import dbwork.address.Address;
 import org.postgresql.util.PSQLException;
 
 import java.sql.Connection;
