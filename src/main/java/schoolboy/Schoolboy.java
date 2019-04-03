@@ -5,7 +5,6 @@ import lombok.Data;
 import professions.Profession;
 import school.School;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

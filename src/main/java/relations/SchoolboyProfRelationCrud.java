@@ -1,6 +1,5 @@
 package relations;
 
-import dbwork.address.Address;
 import org.postgresql.util.PSQLException;
 import professions.Profession;
 import professions.ProfessionCrud;

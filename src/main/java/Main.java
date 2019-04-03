@@ -1,14 +1,9 @@
 
-
-import dbwork.address.Address;
 import dbwork.address.AddressCrud;
 import professions.Profession;
 import professions.ProfessionCrud;
-import relations.SchoolboyProfRelation;
 import relations.SchoolboyProfRelationCrud;
-import school.School;
 import school.SchoolCrud;
-import schoolboy.Schoolboy;
 import schoolboy.SchoolboyCrud;
 
 import java.sql.*;

@@ -2,8 +2,6 @@ package relations;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class SchoolboyProfRelation {
 

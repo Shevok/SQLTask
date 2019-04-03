@@ -1,20 +1,15 @@
 package schoolboy;
 
-import dbwork.address.Address;
 import dbwork.address.AddressCrud;
 import org.postgresql.util.PSQLException;
 import professions.Profession;
-import professions.ProfessionCrud;
 import relations.SchoolboyProfRelation;
 import relations.SchoolboyProfRelationCrud;
-import school.School;
 import school.SchoolCrud;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SchoolboyCrud {
