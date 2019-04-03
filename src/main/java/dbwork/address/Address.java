@@ -16,9 +16,9 @@ public class Address {
     public Address() {
     }
 
-    public Address(int id,  String city, String street, int house_number) {
+    public Address(int id,  String city, String street, int houseNumber) {
         this.id = id;
-        this.houseNumber = house_number;
+        this.houseNumber = houseNumber;
         this.city = city;
         this.street = street;
     }

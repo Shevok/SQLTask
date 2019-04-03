@@ -13,7 +13,7 @@ public class AddressCrud {
 
         try {
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO public.address (id_address, city, street, house_number)" +
+                    "INSERT INTO address (id_address, city, street, house_number)" +
                             " VALUES (?, ?, ?, ?)");
             ps.setInt(1, address.getId());
             ps.setString(2, address.getCity());
@@ -39,27 +39,16 @@ public class AddressCrud {
                             " WHERE id_address = ?");
             ps.setInt(1, id);
 
-             rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
-        } catch (PSQLException e){
+            if (rs.next())
+                return new Address(id, rs.getString(2),
+                        rs.getString(3), rs.getInt(4));
+        }catch (SQLException e){
             e.printStackTrace();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if(rs.next())
-            return new Address(rs.getInt(1), rs.getString(2),
-                    rs.getString(3),rs.getInt(4));
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return null;
         }
         catch (NullPointerException e){
             e.printStackTrace();
-            return null;
         }
         return null;
     }
@@ -84,7 +73,6 @@ public class AddressCrud {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void delete(int id,Connection con){
@@ -98,9 +86,6 @@ public class AddressCrud {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
 
